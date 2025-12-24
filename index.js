@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./config/db");
-require('dotenv').config()
+require("dotenv").config();
 
+const connectDB = require("./config/db");
 
 const app = express();
 app.use(express.json());
@@ -10,11 +10,13 @@ app.use(cors());
 
 connectDB();
 
-app.use("/api/auth", require("../backend/Router/authrouter"));
-app.use("/api/jobs", require("../backend/Router/jobroutes"));
-app.use("/api/applications", require("../backend/Router/applicationroutes"));
+// routes
+app.use("/api/auth", require("./Router/authrouter"));
+app.use("/api/jobs", require("./Router/jobroutes"));
+app.use("/api/applications", require("./Router/applicationroutes"));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get("/", (req, res) => {
+  res.send("Job Portal API running on Vercel 🚀");
 });
+
+module.exports = app; // ✅ REQUIRED FOR VERCEL
