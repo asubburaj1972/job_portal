@@ -6,14 +6,23 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-/* ---------- MIDDLEWARE ---------- */
-app.use(express.json());
+/* ---------- CORS FIX ---------- */
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: [
+    "http://localhost:5173",   // React local
+    "https://job-portal-5c8md326-asubbujaraj1972s-projects.vercel.app" // Vercel frontend
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
 }));
 
-/* ---------- DATABASE ---------- */
+/* ---------- IMPORTANT ---------- */
+app.options("*", cors()); // 👈 ALLOW PREFLIGHT
+
+app.use(express.json());
+
+/* ---------- DB ---------- */
 connectDB();
 
 /* ---------- ROUTES ---------- */
@@ -21,10 +30,8 @@ app.use("/api/auth", require("./Router/authrouter"));
 app.use("/api/jobs", require("./Router/jobroutes"));
 app.use("/api/applications", require("./Router/applicationroutes"));
 
-/* ---------- TEST ROUTE ---------- */
 app.get("/", (req, res) => {
   res.send("Job Portal API running on Vercel 🚀");
 });
 
-/* ---------- EXPORT FOR VERCEL ---------- */
 module.exports = app;
