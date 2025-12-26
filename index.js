@@ -8,13 +8,9 @@ const app = express();
 
 /* ---------- CORS FIX ---------- */
 app.use(cors({
-  origin: [
-    "http://localhost:5173",   // React local
-    "https://job-portal-5c8md326-asubbujaraj1972s-projects.vercel.app" // Vercel frontend
-  ],
+  origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
 }));
 
 /* ---------- IMPORTANT ---------- */
@@ -34,4 +30,19 @@ app.get("/", (req, res) => {
   res.send("Job Portal API running on Vercel 🚀");
 });
 
+/* ✅ REGISTER ROUTE */
+app.post("/api/auth/register", (req, res) => {
+  const { name, email, password } = req.body;
+  res.json({ message: "User registered successfully" });
+});
+
 module.exports = app;
+
+
+
+
+
+
+
+
+
