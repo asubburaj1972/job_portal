@@ -1,40 +1,30 @@
-// api/index.js
 const express = require("express");
+const cors = require("cors");
 require("dotenv").config();
-const connectDB = require("../api/config/db");
+
+const connectDB = require("./config/db");
 
 const app = express();
 
-
-const cors = require("cors");
-
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://job-portal-5c8md5326-asubbujaraj1972s-projects.vercel.app"
-    ],
-    credentials: true
-  })
-);
-
-
-
-
+/* ---------- MIDDLEWARE ---------- */
 app.use(express.json());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 
+/* ---------- DATABASE ---------- */
 connectDB();
 
-app.use("/api/auth", require("../api/Router/authrouter"));
-app.use("/api/jobs", require("../api/Router/jobroutes"));
-app.use("/api/applications", require("../api/Router/applicationroutes"));
+/* ---------- ROUTES ---------- */
+app.use("/api/auth", require("./Router/authrouter"));
+app.use("/api/jobs", require("./Router/jobroutes"));
+app.use("/api/applications", require("./Router/applicationroutes"));
 
+/* ---------- TEST ROUTE ---------- */
 app.get("/", (req, res) => {
   res.send("Job Portal API running on Vercel 🚀");
 });
 
-// Export the Express app as a serverless function
-module.exports = (req, res) => {
-  app(req, res); // Pass the request and response to Express
-};
+/* ---------- EXPORT FOR VERCEL ---------- */
+module.exports = app;
