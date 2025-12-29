@@ -8,14 +8,19 @@ const app = express();
 connectDB();
 
 /* ✅ CORS CONFIG (MOST IMPORTANT PART) */
-app.use(cors({
+/* ✅ CORS CONFIG (MOST IMPORTANT PART) */
+const corsOptions = {
   origin: [
     "http://localhost:5173",   // Vite frontend (local)
     "https://job-portal-90jdt5pxb-asubburaj1972s-projects.vercel.app" // frontend deployed
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
-}));
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight requests explicitly
 
 
 
